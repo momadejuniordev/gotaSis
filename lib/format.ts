@@ -4,17 +4,17 @@ export function pad2(n: number): string {
   return String(n).padStart(2, "0");
 }
 
-export function brl(v: number | null | undefined): string {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v ?? 0));
+export function moeda(v: number | null | undefined): string {
+  return new Intl.NumberFormat("pt-MZ", { style: "currency", currency: "MZN" }).format(Number(v ?? 0));
 }
 
-export function numeroBR(v: number | null | undefined, casas = 2): string {
-  return new Intl.NumberFormat("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }).format(
+export function numero(v: number | null | undefined, casas = 2): string {
+  return new Intl.NumberFormat("pt-MZ", { minimumFractionDigits: casas, maximumFractionDigits: casas }).format(
     Number(v ?? 0),
   );
 }
 
-export function dataBR(iso: string | null | undefined): string {
+export function dataCurta(iso: string | null | undefined): string {
   if (!iso) return "—";
   const [a, m, d] = iso.slice(0, 10).split("-");
   if (!a || !m || !d) return iso;

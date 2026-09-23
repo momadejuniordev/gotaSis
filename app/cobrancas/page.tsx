@@ -5,7 +5,7 @@ import { Banknote, CreditCard, RefreshCw, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/Badge";
 import { Modal } from "@/components/Modal";
 import { api } from "@/lib/api";
-import { brl, dataBR, hoje, numeroBR } from "@/lib/format";
+import { dataCurta, hoje, moeda } from "@/lib/format";
 import type { Fatura, Pagamento } from "@/lib/types";
 
 const FORMAS = ["Pix", "Boleto", "Cartão", "Dinheiro", "Cheque", "Transferência"];
@@ -48,7 +48,7 @@ export default function CobrancasPage() {
   });
 
   async function estornar(p: Pagamento) {
-    if (!window.confirm(`Estornar o pagamento de ${brl(p.valor)} da fatura ${p.fatura_numero}?`)) return;
+    if (!window.confirm(`Estornar o pagamento de ${moeda(p.valor)} da fatura ${p.fatura_numero}?`)) return;
     try {
       await api(`/api/pagamentos/${p.id}`, { method: "DELETE" });
       await carregar();
@@ -126,9 +126,9 @@ export default function CobrancasPage() {
                         </td>
                         <td>{f.mes_referencia}</td>
                         <td className="num">
-                          <b>{brl(f.valor_total)}</b>
+                          <b>{moeda(f.valor_total)}</b>
                         </td>
-                        <td>{dataBR(f.data_vencimento)}</td>
+                        <td>{dataCurta(f.data_vencimento)}</td>
                         <td>
                           <Badge valor={f.status} />
                         </td>
@@ -171,14 +171,14 @@ export default function CobrancasPage() {
                   ) : (
                     pagamentos.map((p) => (
                       <tr key={p.id}>
-                        <td>{dataBR(p.data_pagamento)}</td>
+                        <td>{dataCurta(p.data_pagamento)}</td>
                         <td>{p.cliente_nome}</td>
                         <td>{p.fatura_numero}</td>
                         <td>
                           <span className="badge badge-faturada">{p.forma_pagamento}</span>
                         </td>
                         <td className="num">
-                          <b>{brl(p.valor)}</b>
+                          <b>{moeda(p.valor)}</b>
                         </td>
                         <td>
                           <div className="actions-cell">
@@ -252,7 +252,7 @@ function PaymentModal({ fatura, onFechar, onSalvo }: { fatura: Fatura; onFechar:
   return (
     <Modal
       titulo="Registrar pagamento"
-      subtitulo={`Fatura ${fatura.numero} · ${fatura.cliente_nome} · ${mesBR(fatura.mes_referencia)}`}
+      subtitulo={`Fatura ${fatura.numero} · ${fatura.cliente_nome} · ${mesAno(fatura.mes_referencia)}`}
       onClose={onFechar}
     >
       {carregandoSaldo ? (
@@ -261,10 +261,10 @@ function PaymentModal({ fatura, onFechar, onSalvo }: { fatura: Fatura; onFechar:
         <>
           <div className="resumo-preview" style={{ marginBottom: 16 }}>
             <span>
-              Valor da fatura: <b>{brl(fatura.valor_total)}</b>
+              Valor da fatura: <b>{moeda(fatura.valor_total)}</b>
             </span>
             <span>
-              Saldo em aberto: <b>{brl(saldo)}</b>
+              Saldo em aberto: <b>{moeda(saldo)}</b>
             </span>
           </div>
 
@@ -310,7 +310,7 @@ function PaymentModal({ fatura, onFechar, onSalvo }: { fatura: Fatura; onFechar:
   );
 }
 
-function mesBR(ym: string): string {
+function mesAno(ym: string): string {
   const [a, m] = ym.split("-");
   return `${m}/${a}`;
 }

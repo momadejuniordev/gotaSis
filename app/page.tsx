@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, Gauge, Receipt, Users, Wallet } from "lucide-react";
+import { AlertTriangle, Receipt, Users, Wallet } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -20,7 +20,7 @@ import {
 import { Badge } from "@/components/Badge";
 import { StatCard } from "@/components/StatCard";
 import { api } from "@/lib/api";
-import { brl, dataBR, mesLabel, numeroBR } from "@/lib/format";
+import { dataCurta, mesLabel, moeda, numero } from "@/lib/format";
 import type { DashboardData } from "@/lib/types";
 
 const CORES_STATUS: Record<string, string> = {
@@ -30,8 +30,8 @@ const CORES_STATUS: Record<string, string> = {
   Cancelada: "#94a3b8",
 };
 
-const tooltipBRL = {
-  formatter: (v: unknown) => brl(Number(v)),
+const tooltipMoeda = {
+  formatter: (v: unknown) => moeda(Number(v)),
 };
 
 export default function DashboardPage() {
@@ -57,7 +57,7 @@ export default function DashboardPage() {
 
   const { resumo, serieMeses, statusFaturas, inadimplentes, ultimasFaturas } = dados;
 
-  const serieBRL = serieMeses.map((m) => ({
+  const serieMoeda = serieMeses.map((m) => ({
     mes: mesLabel(m.mes),
     Faturado: m.faturado,
     Arrecadado: m.arrecadado,
@@ -84,21 +84,21 @@ export default function DashboardPage() {
         />
         <StatCard
           label="Faturado no mês"
-          valor={brl(resumo.faturadoMes)}
-          detalhe={`${numeroBR(resumo.consumoMes, 1)} m³ consumidos`}
+          valor={moeda(resumo.faturadoMes)}
+          detalhe={`${numero(resumo.consumoMes, 1)} m³ consumidos`}
           icone={Receipt}
           cor="#0ea5e9"
         />
         <StatCard
           label="Arrecadado no mês"
-          valor={brl(resumo.arrecadadoMes)}
+          valor={moeda(resumo.arrecadadoMes)}
           detalhe={`${resumo.faturasAbertas} faturas em aberto`}
           icone={Wallet}
           cor="#10b981"
         />
         <StatCard
           label="Inadimplência"
-          valor={brl(resumo.inadimplencia)}
+          valor={moeda(resumo.inadimplencia)}
           detalhe="Faturas vencidas sem pagamento"
           icone={AlertTriangle}
           cor="#ef4444"
@@ -109,11 +109,11 @@ export default function DashboardPage() {
         <div className="card">
           <h2>Faturamento x Arrecadação (6 meses)</h2>
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={serieBRL} margin={{ left: -10, right: 8, top: 4 }}>
+            <BarChart data={serieMoeda} margin={{ left: -10, right: 8, top: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 11 }} tickFormatter={(v: number) => brl(v)} width={80} />
-              <Tooltip {...tooltipBRL} />
+              <YAxis tick={{ fontSize: 11 }} tickFormatter={(v: number) => moeda(v)} width={80} />
+              <Tooltip {...tooltipMoeda} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Faturado" fill="#0284c7" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Arrecadado" fill="#10b981" radius={[4, 4, 0, 0]} />
@@ -141,14 +141,14 @@ export default function DashboardPage() {
                       <Cell key={s.status} fill={CORES_STATUS[s.status] ?? "#94a3b8"} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v: unknown) => brl(Number(v))} />
+                  <Tooltip formatter={(v: unknown) => moeda(Number(v))} />
                 </PieChart>
               </ResponsiveContainer>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
                 {statusFaturas.map((s) => (
                   <span key={s.status} style={{ fontSize: 12, display: "inline-flex", alignItems: "center", gap: 5 }}>
                     <span style={{ width: 10, height: 10, borderRadius: 3, background: CORES_STATUS[s.status] ?? "#94a3b8" }} />
-                    <b>{s.status}</b> · {s.quantidade} ({brl(s.valor)})
+                    <b>{s.status}</b> · {s.quantidade} ({moeda(s.valor)})
                   </span>
                 ))}
               </div>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 11 }} width={46} />
-              <Tooltip formatter={(v: unknown) => [`${numeroBR(Number(v), 1)} m³`, "Consumo"]} />
+              <Tooltip formatter={(v: unknown) => [`${numero(Number(v), 1)} m³`, "Consumo"]} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Line type="monotone" dataKey="consumo" name="Consumo" stroke="#0ea5e9" strokeWidth={2.5} dot={{ r: 3 }} />
             </LineChart>
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                           {i.matricula}
                         </div>
                       </td>
-                      <td className="num">{brl(i.valor)}</td>
+                      <td className="num">{moeda(i.valor)}</td>
                       <td className="num">{i.faturas}</td>
                     </tr>
                   ))
@@ -236,9 +236,9 @@ export default function DashboardPage() {
                     </div>
                   </td>
                   <td>{mesLabel(f.mes_referencia)}</td>
-                  <td className="num">{numeroBR(f.consumo_m3, 1)} m³</td>
-                  <td className="num">{brl(f.valor_total)}</td>
-                  <td>{dataBR(f.data_vencimento)}</td>
+                  <td className="num">{numero(f.consumo_m3, 1)} m³</td>
+                  <td className="num">{moeda(f.valor_total)}</td>
+                  <td>{dataCurta(f.data_vencimento)}</td>
                   <td>
                     <Badge valor={f.status} />
                   </td>

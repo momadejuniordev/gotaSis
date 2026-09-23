@@ -5,7 +5,7 @@ import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { Badge } from "@/components/Badge";
 import { Modal } from "@/components/Modal";
 import { api } from "@/lib/api";
-import { dataBR } from "@/lib/format";
+import { dataCurta } from "@/lib/format";
 import type { Cliente } from "@/lib/types";
 
 type FormCliente = {
@@ -236,7 +236,7 @@ export default function ClientesPage() {
       {modalAberto && (
         <Modal
           titulo={editando ? "Editar cliente" : "Novo cliente"}
-          subtitulo={editando ? `Matrícula ${editando.matricula} · cadastrado em ${dataBR(editando.criado_em)}` : "Preencha os dados do cliente"}
+          subtitulo={editando ? `Matrícula ${editando.matricula} · cadastrado em ${dataCurta(editando.criado_em)}` : "Preencha os dados do cliente"}
           onClose={() => setModalAberto(false)}
         >
           <div className="form-grid">

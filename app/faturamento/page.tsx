@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FileText, RefreshCw, Settings, Trash2, XCircle } from "lucide-react";
 import { Badge } from "@/components/Badge";
 import { api } from "@/lib/api";
-import { brl, dataBR, mesLabel, numeroBR } from "@/lib/format";
+import { dataCurta, mesLabel, moeda, numero } from "@/lib/format";
 import type { ConfigSistema, Fatura, StatusFatura } from "@/lib/types";
 
 export default function FaturamentoPage() {
@@ -189,14 +189,14 @@ export default function FaturamentoPage() {
                           </div>
                         </td>
                         <td>{mesLabel(f.mes_referencia)}</td>
-                        <td className="num">{numeroBR(f.consumo_m3, 1)} m³</td>
+                        <td className="num">{numero(f.consumo_m3, 1)} m³</td>
                         <td
                           className="num"
-                          title={`Água: ${brl(f.tarifa_agua)} · Esgoto: ${brl(f.tarifa_esgoto)} · Taxa fixa: ${brl(f.taxa_fixa)}`}
+                          title={`Água: ${moeda(f.tarifa_agua)} · Esgoto: ${moeda(f.tarifa_esgoto)} · Taxa fixa: ${moeda(f.taxa_fixa)}`}
                         >
-                          <b>{brl(f.valor_total)}</b>
+                          <b>{moeda(f.valor_total)}</b>
                         </td>
-                        <td>{dataBR(f.data_vencimento)}</td>
+                        <td>{dataCurta(f.data_vencimento)}</td>
                         <td>
                           <Badge valor={f.status} />
                         </td>

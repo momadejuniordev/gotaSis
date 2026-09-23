@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const cfg = getConfig(getDb());
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-MZ">
       <body>
         <div className="app-shell">
           <Sidebar empresa={cfg.nome_empresa} />

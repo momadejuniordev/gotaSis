@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
 
     const anterior = ultima ? Number(ultima.leitura_atual) : 0;
     if (leituraAtual < anterior) {
-      return erro(`A leitura atual não pode ser menor que a anterior (${anterior.toLocaleString("pt-BR")})`);
+      return erro(`A leitura atual não pode ser menor que a anterior (${anterior.toLocaleString("pt-MZ")})`);
     }
 
     const consumo = Math.round((leituraAtual - anterior) * 10) / 10;

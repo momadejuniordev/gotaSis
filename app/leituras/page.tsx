@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Gauge, Plus, Search, Trash2 } from "lucide-react";
 import { api } from "@/lib/api";
-import { dataBR, hoje, numeroBR } from "@/lib/format";
+import { dataCurta, hoje, numero } from "@/lib/format";
 import type { Cliente, Leitura } from "@/lib/types";
 
 export default function LeiturasPage() {
@@ -86,7 +86,7 @@ export default function LeiturasPage() {
           observacao,
         },
       });
-      setMsgForm(`Leitura registrada com sucesso (${numeroBR(consumo ?? 0, 1)} m³).`);
+      setMsgForm(`Leitura registrada com sucesso (${numero(consumo ?? 0, 1)} m³).`);
       setLeituraAtual("");
       setLeitor("");
       setObservacao("");
@@ -100,7 +100,7 @@ export default function LeiturasPage() {
   }
 
   async function excluir(l: Leitura) {
-    if (!window.confirm(`Excluir a leitura de ${l.cliente_nome} (${dataBR(l.data_leitura)})?`)) return;
+    if (!window.confirm(`Excluir a leitura de ${l.cliente_nome} (${dataCurta(l.data_leitura)})?`)) return;
     try {
       await api(`/api/leituras/${l.id}`, { method: "DELETE" });
       await carregar();
@@ -165,14 +165,14 @@ export default function LeiturasPage() {
 
         <div className="resumo-preview" style={{ marginTop: 16 }}>
           <span>
-            Leitura anterior: <b>{anterior === null ? "—" : `${numeroBR(anterior, 1)} m³`}</b>
+            Leitura anterior: <b>{anterior === null ? "—" : `${numero(anterior, 1)} m³`}</b>
           </span>
           <span>
             Consumo calculado:{" "}
             <b>
               {consumo === null
                 ? "aguardando leitura válida"
-                : `${numeroBR(consumo, 1)} m³`}
+                : `${numero(consumo, 1)} m³`}
             </b>
           </span>
         </div>
@@ -235,17 +235,17 @@ export default function LeiturasPage() {
                 ) : (
                   filtradas.map((l) => (
                     <tr key={l.id}>
-                      <td>{dataBR(l.data_leitura)}</td>
+                      <td>{dataCurta(l.data_leitura)}</td>
                       <td>
                         {l.cliente_nome}
                         <div className="muted" style={{ fontSize: 11.5 }}>
                           {l.cliente_matricula}
                         </div>
                       </td>
-                      <td className="num">{numeroBR(l.leitura_anterior, 1)}</td>
-                      <td className="num">{numeroBR(l.leitura_atual, 1)}</td>
+                      <td className="num">{numero(l.leitura_anterior, 1)}</td>
+                      <td className="num">{numero(l.leitura_atual, 1)}</td>
                       <td className="num">
-                        <b>{numeroBR(l.consumo_m3, 1)} m³</b>
+                        <b>{numero(l.consumo_m3, 1)} m³</b>
                       </td>
                       <td>{l.leitor ?? "—"}</td>
                       <td>

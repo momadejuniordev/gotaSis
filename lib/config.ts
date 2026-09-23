@@ -3,9 +3,9 @@ import type { ConfigSistema } from "./types";
 
 export const CONFIG_PADRAO: ConfigSistema = {
   nome_empresa: "Águas de Nova Esperança",
-  tarifa_agua_m3: 4.55,
-  tarifa_esgoto_m3: 2.95,
-  taxa_fixa: 18.9,
+  tarifa_agua_m3: 45.5,
+  tarifa_esgoto_m3: 29.5,
+  taxa_fixa: 189.0,
   vencimento_dia: 10,
 };
 
