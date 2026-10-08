@@ -4,3 +4,5 @@ out
 *.log
 data/*.sqlite
 data/*.sqlite-*
+.vercel
+.env*.local
